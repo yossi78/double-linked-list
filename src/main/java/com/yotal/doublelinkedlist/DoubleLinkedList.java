@@ -42,6 +42,7 @@ public class DoubleLinkedList<T> {
         return (T)linkedList.getLast().getData();
     }
 
+
     public T removeFirst(){
         T result= (T)linkedList.removeFirst();
         if(!linkedList.isEmpty()){
@@ -65,13 +66,19 @@ public class DoubleLinkedList<T> {
 
 
 
-    public void moveNodeBackward(int index){
+    public Node<T> moveNodeBackward(Node<T> target){
+        int index = linkedList.indexOf(target);
+        Node<T> resultNode = moveNodeBackward(index);
+        return resultNode;
+    }
+
+    public Node<T> moveNodeBackward(int index){
         Node<T> prev = getNodeSafly(index-1);
         Node<T> target = getNodeSafly(index);
         Node<T> next = getNodeSafly(index+1);
         Node<T> prevPrev = getNodeSafly(index-2);
         if(linkedList.size()<2 || target==null || index==0){
-            return;
+            return null;
         }
         if(prevPrev!=null){
             prevPrev.setNext(target);
@@ -87,17 +94,23 @@ public class DoubleLinkedList<T> {
         prev = getNodeSafly(index);
         linkedList.set(index,target);
         linkedList.set(index-1,prev);
+        return target;
     }
 
 
 
-    public void moveNodeForward(int index){
+    public Node<T> moveNodeForward(Node<T> target){
+        int index = linkedList.indexOf(target);
+        return moveNodeForward(index);
+    }
+
+    public Node<T> moveNodeForward(int index){
         Node<T> prev = getNodeSafly(index-1);
         Node<T> target = getNodeSafly(index);
         Node<T> next = getNodeSafly(index+1);
         Node<T> nextNext = getNodeSafly(index+2);
         if(linkedList.size()<2 || target==null || index==linkedList.size()-1){
-            return;
+            return null;
         }
         if(prev!=null){
             prev.setNext(next);
@@ -117,6 +130,8 @@ public class DoubleLinkedList<T> {
 
         linkedList.set(index,target);
         linkedList.set(index+1,next);
+
+        return target;
     }
 
 
@@ -177,6 +192,17 @@ public class DoubleLinkedList<T> {
             return null;
         }
     }
+
+
+
+    public Node<T> getFirstElement(){
+        return getNodeSafly(0);
+    }
+    public Node<T> getLastElement(){
+        return getNodeSafly(linkedList.size()-1);
+    }
+
+
 
 
 
