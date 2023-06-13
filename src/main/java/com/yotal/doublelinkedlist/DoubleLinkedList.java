@@ -65,6 +65,30 @@ public class DoubleLinkedList<T> {
 
 
 
+    public void moveNodeBackward(int index){
+        Node<T> prev = getNodeSafly(index-1);
+        Node<T> target = getNodeSafly(index);
+        Node<T> next = getNodeSafly(index+1);
+        Node<T> prevPrev = getNodeSafly(index-2);
+        if(linkedList.size()<2 || target==null || index==0){
+            return;
+        }
+        if(prevPrev!=null){
+            prevPrev.setNext(target);
+        }
+        target.setPrev(prevPrev);
+        target.setNext(prev);
+        prev.setPrev(target);
+        prev.setNext(next);
+        if(next!=null){
+            next.setPrev(prev);
+        }
+        target = getNodeSafly(index-1);
+        prev = getNodeSafly(index);
+        linkedList.set(index,target);
+        linkedList.set(index-1,prev);
+    }
+
 
 
     public void moveNodeForward(int index){
@@ -161,24 +185,12 @@ public class DoubleLinkedList<T> {
 
 
     public static void main(String[] args) {
-
         DoubleLinkedList<Integer>  doubleLinkedList=new DoubleLinkedList<>();
         doubleLinkedList.addFirst(300);
         doubleLinkedList.addLast(400);
         doubleLinkedList.addFirst(200);
         doubleLinkedList.addFirst(100);
         doubleLinkedList.addLast(500);
-
-
-
-
-       doubleLinkedList.moveNodeForward(0);
-        doubleLinkedList.moveNodeForward(1);
-
-
-
-
-
         doubleLinkedList.printLinkedList();
         doubleLinkedList.printLinkedListByPointers();
 
