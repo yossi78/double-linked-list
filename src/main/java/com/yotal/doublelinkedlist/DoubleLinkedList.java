@@ -63,6 +63,41 @@ public class DoubleLinkedList<T> {
         return (T)linkedList.remove(index);
     }
 
+
+
+
+
+    public void moveNodeForward(int index){
+        Node<T> prev = getNodeSafly(index-1);
+        Node<T> target = getNodeSafly(index);
+        Node<T> next = getNodeSafly(index+1);
+        Node<T> nextNext = getNodeSafly(index+2);
+        if(linkedList.size()<2 || target==null || index==linkedList.size()-1){
+            return;
+        }
+        if(prev!=null){
+            prev.setNext(next);
+        }
+        if(next!=null){
+            next.setPrev(prev);
+            next.setNext(target);
+        }
+        target.setPrev(next);
+        target.setNext(nextNext);
+        if(nextNext!=null){
+            nextNext.setPrev(target);
+        }
+
+        target = getNodeSafly(index+1);
+        next = getNodeSafly(index);
+
+        linkedList.set(index,target);
+        linkedList.set(index+1,next);
+    }
+
+
+
+
     public void skipNode(int index){
         if(linkedList.size()<2){
             return;
@@ -111,35 +146,36 @@ public class DoubleLinkedList<T> {
     }
 
 
-//    public static void main(String[] args) {
-//        LinkedList<Integer> linkedList=new LinkedList<>();
-//        linkedList.add(100);
-//        linkedList.add(200);
-//        linkedList.add(300);
-//        Integer x = linkedList.remove(0);
-//        System.out.println("x="+x);
-//        System.out.println("");
-//    }
+    public Node<T> getNodeSafly(int index){
+        try{
+            Node<T> node =linkedList.get(index);
+            return node;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+
+
+
 
 
     public static void main(String[] args) {
 
         DoubleLinkedList<Integer>  doubleLinkedList=new DoubleLinkedList<>();
-        doubleLinkedList.addFirst(400);
         doubleLinkedList.addFirst(300);
-        doubleLinkedList.addLast(500);
-        doubleLinkedList.addLast(600);
+        doubleLinkedList.addLast(400);
         doubleLinkedList.addFirst(200);
         doubleLinkedList.addFirst(100);
-        doubleLinkedList.addLast(700);
+        doubleLinkedList.addLast(500);
 
-        doubleLinkedList.remove(6);
-        doubleLinkedList.remove(5);
-        doubleLinkedList.remove(4);
-        doubleLinkedList.remove(3);
-        doubleLinkedList.remove(2);
-        doubleLinkedList.remove(1);
-       doubleLinkedList.remove(0);
+
+
+
+       doubleLinkedList.moveNodeForward(0);
+        doubleLinkedList.moveNodeForward(1);
+
+
 
 
 
