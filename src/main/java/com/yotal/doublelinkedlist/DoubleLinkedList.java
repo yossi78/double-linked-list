@@ -164,7 +164,6 @@ public class DoubleLinkedList<T> {
     }
 
 
-
     public int size(){
         return linkedList.size();
     }
@@ -178,9 +177,6 @@ public class DoubleLinkedList<T> {
             return null;
         }
     }
-
-
-
 
 
 
