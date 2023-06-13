@@ -59,7 +59,7 @@ public class DoubleLinkedList<T> {
     }
 
     public T remove(int index){
-        skipNode(index);
+        disconnectNode(index);
         return (T)linkedList.remove(index);
     }
 
@@ -98,7 +98,7 @@ public class DoubleLinkedList<T> {
 
 
 
-    public void skipNode(int index){
+    public void disconnectNode(int index){
         if(linkedList.size()<2){
             return;
         }
