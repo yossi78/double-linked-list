@@ -1,206 +1,181 @@
 package com.yotal.doublelinkedlist;
-import java.util.LinkedList;
 
 
 public class DoubleLinkedList<T> {
 
-    private LinkedList<Node> linkedList;
+    private Node<T> head ;
+    private Node<T> tail ;
 
-    public DoubleLinkedList() {
-        this.linkedList = new LinkedList<>();
-    }
 
-    public void addFirst(T t){
-        Node<T> node  =new Node<>(t);
-        linkedList.addFirst(node);
-        if(linkedList.size()<2){
-            return;
+
+
+
+
+    // XXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+    public Node<T> addHead(Node<T> node){
+        Node<T> prevNode = node!=null ? node.getPrev() : null;
+        Node<T> nextNode = node!=null ? node.getNext() : null;
+        Node<T> nextNextNode = nextNode!=null ? nextNode.getNext() : null;
+        Node<T> prevPrevNode = prevNode!=null ? prevNode.getPrev() : null;
+
+        if(head!=null){
+            head.setPrev(node);
+
         }
-        Node<T> first = linkedList.get(0);
-        Node<T> second = linkedList.get(1);
-        first.setNext(second);
-        second.setPrev(first);
-
-    }
-    public void addLast(T t){
-        Node<T> node  =new Node<>(t);
-        linkedList.addLast(node);
-        if(linkedList.size()<2){
-            return;
-        }
-        Node<T> prev = linkedList.get(size()-2);
-        Node<T> newNode = linkedList.get(size()-1);
-        prev.setNext(newNode);
-        newNode.setPrev(prev);
+        node.setNext(head);
+        head=node;
+        return head;
     }
 
-    public T getFirst(){
-        return (T)linkedList.getFirst().getData();
-    }
-
-    public T getLast(){
-        return (T)linkedList.getLast().getData();
+    public Node<T> addHead(T t){
+        Node<T> node =new Node<>(t);
+        return addHead(node);
     }
 
 
-    public T removeFirst(){
-        T result= (T)linkedList.removeFirst();
-        if(!linkedList.isEmpty()){
-            linkedList.get(0).setPrev(null);
+    public Node<T> addTail(Node<T> node){
+        if(tail!=null){
+            tail.setNext(node);
+            node.setPrev(tail);
         }
-        return result;
+        tail=node;
+        return tail;
     }
 
-    public T removeLast(){
-        T result=  (T)linkedList.removeLast();
-        if(!linkedList.isEmpty()){
-            linkedList.getLast().setNext(null);
-        }
-        return result;
-    }
-
-    public T remove(int index){
-        disconnectNode(index);
-        return (T)linkedList.remove(index);
+    public Node<T> addTail(T t){
+        Node<T> node =new Node<>(t);
+        return addTail(node);
     }
 
 
-
-    public Node<T> moveNodeBackward(Node<T> target){
-        int index = linkedList.indexOf(target);
-        Node<T> resultNode = moveNodeBackward(index);
-        return resultNode;
+    public Node<T> getHead(){
+        return head;
     }
 
-    public Node<T> moveNodeBackward(int index){
-        Node<T> prev = getNodeSafly(index-1);
-        Node<T> target = getNodeSafly(index);
-        Node<T> next = getNodeSafly(index+1);
-        Node<T> prevPrev = getNodeSafly(index-2);
-        if(linkedList.size()<2 || target==null || index==0){
-            return null;
-        }
-        if(prevPrev!=null){
-            prevPrev.setNext(target);
-        }
-        target.setPrev(prevPrev);
-        target.setNext(prev);
-        prev.setPrev(target);
-        prev.setNext(next);
-        if(next!=null){
-            next.setPrev(prev);
-        }
-        target = getNodeSafly(index-1);
-        prev = getNodeSafly(index);
-        linkedList.set(index,target);
-        linkedList.set(index-1,prev);
-        return target;
+    public Node<T> getTail(){
+        return tail;
+    }
+
+    public Node<T> removeHead(){
+       if(head!=null){
+           head.getNext().setPrev(null);
+           head=head.getNext();
+       }
+       return head;
     }
 
 
-
-    public Node<T> moveNodeForward(Node<T> target){
-        int index = linkedList.indexOf(target);
-        return moveNodeForward(index);
-    }
-
-    public Node<T> moveNodeForward(int index){
-        Node<T> prev = getNodeSafly(index-1);
-        Node<T> target = getNodeSafly(index);
-        Node<T> next = getNodeSafly(index+1);
-        Node<T> nextNext = getNodeSafly(index+2);
-        if(linkedList.size()<2 || target==null || index==linkedList.size()-1){
-            return null;
+    public Node<T> removeTail(){
+        Node<T> prevTail = tail!=null ? tail.getPrev() : null;
+        if(prevTail!=null){
+            prevTail.setNext(null);
+            tail=prevTail;
+            return tail;
         }
-        if(prev!=null){
-            prev.setNext(next);
-        }
-        if(next!=null){
-            next.setPrev(prev);
-            next.setNext(target);
-        }
-        target.setPrev(next);
-        target.setNext(nextNext);
-        if(nextNext!=null){
-            nextNext.setPrev(target);
-        }
-
-        target = getNodeSafly(index+1);
-        next = getNodeSafly(index);
-
-        linkedList.set(index,target);
-        linkedList.set(index+1,next);
-
-        return target;
+        tail=null;
+        return tail;
     }
 
 
-
-
-    public void disconnectNode(int index){
-        if(linkedList.size()<2){
-            return;
+    public void remove(Node<T> node){
+        Node<T> prevNode = node!=null ? node.getPrev() : null;
+        Node<T> nextNode = node!=null ? node.getNext() : null;
+        if(prevNode!=null){
+            prevNode.setNext(nextNode);
         }
-        if(index==0){
-            Node<T> next = linkedList.get(index+1);
-            next.setPrev(null);
-            return;
+        if(nextNode!=null){
+            nextNode.setPrev(prevNode);
         }
-        if(index==linkedList.size()-1){
-            Node<T> prev = linkedList.get(index-1);
-            prev.setNext(null);
-            return;
-        }
-        Node<T> prev = linkedList.get(index-1);
-        Node<T> next = linkedList.get(index+1);
-        prev.setNext(next);
-        next.setPrev(prev);
+        node=null;
     }
 
-    public void printLinkedList(){
-        System.out.println("PRINT LINKED LIST");
-        for(int i=0;i<linkedList.size();i++){
-            System.out.println(linkedList.get(i).getData() + " ");
-        }
-        System.out.println("----------------------------------------------------");
-    }
-
-    public void printLinkedListByPointers(){
-        System.out.println("PRINT LINKED LIST BY POINTER");
-        if(linkedList.isEmpty()){
-            return;
-        }
-        Node current = linkedList.getFirst();
+    public Boolean isContains(Node<T> node){
+        Node<T> current=head;
         while(current!=null){
-            System.out.println(current.getData() + " ");
+            if(current.equals(node)){
+                return true;
+            }
             current=current.getNext();
         }
-        System.out.println("----------------------------------------------------");
+        return false;
     }
 
-
-    public int size(){
-        return linkedList.size();
+    public Boolean isContains(T t){
+        return isContains(new Node<>(t));
     }
 
+    public Node<T> moveNodeBackward(Node<T> node){
+        Node<T> prevNode = node!=null ? node.getPrev() : null;
+        Node<T> nextNode = node!=null ? node.getNext() : null;
+        Node<T> prevPrevNode = prevNode!=null ? prevNode.getPrev() : null;
+        if(prevPrevNode!=null){
+            prevPrevNode.setNext(node);
+            node.setPrev(prevPrevNode);
+            node.setNext(prevNode);
+        }
+        if(prevNode!=null){
+            prevNode.setPrev(node);
+        }
+        refreshHeadTail();
+        return node;
+    }
 
-    public Node<T> getNodeSafly(int index){
-        try{
-            Node<T> node =linkedList.get(index);
-            return node;
-        }catch (Exception e){
-            return null;
+    private void refreshHeadTail() {
+        if(head!=null && head.getPrev()!=null){
+            head=head.getPrev();
+        }
+        if(tail!=null && tail.getNext()!=null){
+            tail=tail.getNext();
         }
     }
 
+    public Node<T> moveNodeForward(Node<T> node){
+        Node<T> prevNode = node!=null ? node.getPrev() : null;
+        Node<T> nextNode = node!=null ? node.getNext() : null;
+        Node<T> nextNextNode = nextNode!=null ? nextNode.getNext() : null;
+        if(nextNextNode!=null){
+            nextNextNode.setPrev(node);
+            node.setNext(nextNextNode);
+            node.setPrev(nextNode);
+        }
+        if(nextNode!=null){
+            nextNode.setNext(node);
+        }
+        refreshHeadTail();
+        return node;
+    }
 
 
-    public Node<T> getFirstElement(){
-        return getNodeSafly(0);
+    public Integer getSize(){
+        Integer size=0;
+        Node<T> current=head;
+        while(current!=null){
+            size++;
+            current=current.getNext();
+        }
+        return size;
     }
-    public Node<T> getLastElement(){
-        return getNodeSafly(linkedList.size()-1);
+
+
+    public void printDoubleLinkedList(){
+        Node<T> current=head;
+        while(current!=null){
+            System.out.print(current.getData());
+            if(current.getNext()!=null){
+                System.out.print(" -> ");
+            }
+            current=current.getNext();
+        }
+        System.out.println("\n---------------------------------------------------------");
     }
+
+
+
+
+
+
 
 
 
@@ -208,13 +183,9 @@ public class DoubleLinkedList<T> {
 
     public static void main(String[] args) {
         DoubleLinkedList<Integer>  doubleLinkedList=new DoubleLinkedList<>();
-        doubleLinkedList.addFirst(300);
-        doubleLinkedList.addLast(400);
-        doubleLinkedList.addFirst(200);
-        doubleLinkedList.addFirst(100);
-        doubleLinkedList.addLast(500);
-        doubleLinkedList.printLinkedList();
-        doubleLinkedList.printLinkedListByPointers();
+        doubleLinkedList.addHead(100);
+        doubleLinkedList.addHead(200);
+       doubleLinkedList.printDoubleLinkedList();
 
     }
 
