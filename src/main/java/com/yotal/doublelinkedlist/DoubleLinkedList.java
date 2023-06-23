@@ -12,8 +12,7 @@ public class DoubleLinkedList<T> {
 
 
     // XXXXXXXXXXXXXXXXXXXXXXXXXX
-
-
+    // TODO:  update the tail please
     public Node<T> addHead(Node<T> node){
         Node<T> prevNode = node!=null ? node.getPrev() : null;
         Node<T> nextNode = node!=null ? node.getNext() : null;
