@@ -8,23 +8,19 @@ public class DoubleLinkedList<T> {
 
 
 
-
-
-
-    // XXXXXXXXXXXXXXXXXXXXXXXXXX
-    // TODO:  update the tail please
     public Node<T> addHead(Node<T> node){
         Node<T> prevNode = node!=null ? node.getPrev() : null;
         Node<T> nextNode = node!=null ? node.getNext() : null;
         Node<T> nextNextNode = nextNode!=null ? nextNode.getNext() : null;
         Node<T> prevPrevNode = prevNode!=null ? prevNode.getPrev() : null;
-
         if(head!=null){
             head.setPrev(node);
-
         }
         node.setNext(head);
         head=node;
+
+        refreshHeadTail();
+
         return head;
     }
 
@@ -40,6 +36,7 @@ public class DoubleLinkedList<T> {
             node.setPrev(tail);
         }
         tail=node;
+        refreshHeadTail();
         return tail;
     }
 
@@ -122,11 +119,29 @@ public class DoubleLinkedList<T> {
     }
 
     private void refreshHeadTail() {
-        if(head!=null && head.getPrev()!=null){
-            head=head.getPrev();
+        refreshHead();
+        refreshTail();
+    }
+
+    private void refreshHead(){
+        Node<T> currentHead=head;
+        while(currentHead!=null && currentHead.getPrev()!=null){
+            currentHead=currentHead.getPrev();
         }
-        if(tail!=null && tail.getNext()!=null){
-            tail=tail.getNext();
+        head=currentHead;
+        if(head==null){
+            head=tail;
+        }
+    }
+
+    private void refreshTail(){
+        Node<T> currentTail=tail;
+        while(currentTail!=null && currentTail.getNext()!=null){
+            currentTail=currentTail.getNext();
+        }
+        tail=currentTail;
+        if(tail==null){
+            tail=head;
         }
     }
 
@@ -161,7 +176,9 @@ public class DoubleLinkedList<T> {
     public void printDoubleLinkedList(){
         Node<T> current=head;
         while(current!=null){
-            System.out.print(current.getData());
+            Node<T> preNode = current.getPrev()!=null ? current.getPrev() : null;
+            String prevData = preNode!=null ? String.valueOf(preNode.getData()) : "";
+            System.out.print(current.getData() + " (p="+prevData + ")");
             if(current.getNext()!=null){
                 System.out.print(" -> ");
             }
@@ -182,8 +199,13 @@ public class DoubleLinkedList<T> {
 
     public static void main(String[] args) {
         DoubleLinkedList<Integer>  doubleLinkedList=new DoubleLinkedList<>();
-        doubleLinkedList.addHead(100);
-        doubleLinkedList.addHead(200);
+        doubleLinkedList.addTail(100);
+        doubleLinkedList.addTail(200);
+        doubleLinkedList.addTail(300);
+        doubleLinkedList.addTail(400);
+        doubleLinkedList.addTail(500);
+
+
        doubleLinkedList.printDoubleLinkedList();
 
     }
