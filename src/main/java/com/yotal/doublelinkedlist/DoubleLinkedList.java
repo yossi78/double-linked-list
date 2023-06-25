@@ -49,11 +49,11 @@ public class DoubleLinkedList<T> {
     }
 
     public Node<T> removeHead(){
-       if(head!=null){
-           head.getNext().setPrev(null);
-           head=head.getNext();
-       }
-       return head;
+        if(head!=null){
+            head.getNext().setPrev(null);
+            head=head.getNext();
+        }
+        return head;
     }
 
 
@@ -63,6 +63,9 @@ public class DoubleLinkedList<T> {
             prevTail.setNext(null);
             tail=prevTail;
             return tail;
+        }
+        if(tail.equals(head)){
+            head=null;
         }
         tail=null;
         return tail;
@@ -78,7 +81,14 @@ public class DoubleLinkedList<T> {
         if(nextNode!=null){
             nextNode.setPrev(prevNode);
         }
+        if(node.equals(head)){
+            head=null;
+        }
+        if(node.equals(tail)){
+            tail=null;
+        }
         node=null;
+        refreshHeadTail();
     }
 
     public Boolean isContains(Node<T> node){
@@ -191,6 +201,9 @@ public class DoubleLinkedList<T> {
 
 
     public Node moveNodeToBeHead(Node node) {
+        if(node.equals(head)){
+            return head;
+        }
         Node<T> prevNode = node!=null ? node.getPrev() : null;
         Node<T> nextNode = node!=null ? node.getNext() : null;
         if(prevNode!=null){
