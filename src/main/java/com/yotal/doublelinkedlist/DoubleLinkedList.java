@@ -229,13 +229,7 @@ public class DoubleLinkedList<T> {
         doubleLinkedList.addTail(300);
         doubleLinkedList.addTail(400);
         doubleLinkedList.addTail(500);
-
-
-
-
-
-
-       doubleLinkedList.printDoubleLinkedList(false);
+        doubleLinkedList.printDoubleLinkedList(false);
         doubleLinkedList.printDoubleLinkedList(true);
 
     }
