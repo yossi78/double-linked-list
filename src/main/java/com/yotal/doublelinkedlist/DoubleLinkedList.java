@@ -103,16 +103,20 @@ public class DoubleLinkedList<T> {
     }
 
     public Node<T> moveNodeBackward(Node<T> node){
-        Node<T> prevNode = node!=null ? node.getPrev() : null;
-        Node<T> nextNode = node!=null ? node.getNext() : null;
-        Node<T> prevPrevNode = prevNode!=null ? prevNode.getPrev() : null;
-        if(prevPrevNode!=null){
-            prevPrevNode.setNext(node);
-            node.setPrev(prevPrevNode);
-            node.setNext(prevNode);
+        Node<T> prev = node!=null ? node.getPrev() : null;
+        Node<T> next = node!=null ? node.getNext() : null;
+        Node<T> prevPrev = prev!=null ? prev.getPrev() : null;
+        if(prevPrev!=null){
+            prevPrev.setNext(node);
         }
-        if(prevNode!=null){
-            prevNode.setPrev(node);
+        node.setPrev(prevPrev);
+        if(prev!=null){
+            prev.setPrev(node);
+            prev.setNext(next);
+            node.setNext(prev);
+        }
+        if(next!=null && prev!=null){
+            next.setPrev(prev);
         }
         refreshHeadTail();
         return node;
@@ -173,12 +177,16 @@ public class DoubleLinkedList<T> {
     }
 
 
-    public void printDoubleLinkedList(){
+    public void printDoubleLinkedList(Boolean withPrev){
         Node<T> current=head;
         while(current!=null){
+
             Node<T> preNode = current.getPrev()!=null ? current.getPrev() : null;
             String prevData = preNode!=null ? String.valueOf(preNode.getData()) : "";
-            System.out.print(current.getData() + " (p="+prevData + ")");
+            System.out.print(current.getData() );
+            if(withPrev){
+                System.out.print(" (p="+prevData + ")");
+            }
             if(current.getNext()!=null){
                 System.out.print(" -> ");
             }
@@ -189,7 +197,24 @@ public class DoubleLinkedList<T> {
 
 
 
-
+    public Node moveNodeToBeHead(Node node) {
+        Node<T> prevNode = node!=null ? node.getPrev() : null;
+        Node<T> nextNode = node!=null ? node.getNext() : null;
+        if(prevNode!=null){
+            prevNode.setNext(nextNode);
+        }
+        if(nextNode!=null){
+            nextNode.setPrev(prevNode);
+        }
+        node.setPrev(null);
+        node.setNext(head);
+        if(head!=null){
+            head.setPrev(node);
+        }
+        head=node;
+        refreshHeadTail();
+        return head;
+    }
 
 
 
@@ -206,7 +231,12 @@ public class DoubleLinkedList<T> {
         doubleLinkedList.addTail(500);
 
 
-       doubleLinkedList.printDoubleLinkedList();
+
+
+
+
+       doubleLinkedList.printDoubleLinkedList(false);
+        doubleLinkedList.printDoubleLinkedList(true);
 
     }
 
