@@ -9,18 +9,12 @@ public class DoubleLinkedList<T> {
 
 
     public Node<T> addHead(Node<T> node){
-        Node<T> prevNode = node!=null ? node.getPrev() : null;
-        Node<T> nextNode = node!=null ? node.getNext() : null;
-        Node<T> nextNextNode = nextNode!=null ? nextNode.getNext() : null;
-        Node<T> prevPrevNode = prevNode!=null ? prevNode.getPrev() : null;
         if(head!=null){
             head.setPrev(node);
         }
         node.setNext(head);
         head=node;
-
         refreshHeadTail();
-
         return head;
     }
 
@@ -150,7 +144,6 @@ public class DoubleLinkedList<T> {
     }
 
     public Node<T> moveNodeForward(Node<T> node){
-        Node<T> prevNode = node!=null ? node.getPrev() : null;
         Node<T> nextNode = node!=null ? node.getNext() : null;
         Node<T> nextNextNode = nextNode!=null ? nextNode.getNext() : null;
         if(nextNextNode!=null){
@@ -219,9 +212,6 @@ public class DoubleLinkedList<T> {
 
 
 
-
-
-
     public static void main(String[] args) {
         DoubleLinkedList<Integer>  doubleLinkedList=new DoubleLinkedList<>();
         doubleLinkedList.addTail(100);
@@ -233,7 +223,6 @@ public class DoubleLinkedList<T> {
         doubleLinkedList.printDoubleLinkedList(true);
 
     }
-
 
 
 }
